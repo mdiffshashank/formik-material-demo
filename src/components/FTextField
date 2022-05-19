@@ -1,0 +1,30 @@
+import { Box, TextField, TextFieldProps } from "@mui/material";
+import { useField, FieldHookConfig } from "formik";
+
+export type FTextFieldProps<Val> = {
+  field: string | FieldHookConfig<Val>;
+  count?: number;
+} & TextFieldProps;
+//eslint-disable-next-line
+ function FTextField<Val = any>(props: FTextFieldProps<Val>) {
+  const [field, meta] = useField(props.field);
+
+  return (
+    <Box display="flex" flexDirection="column" width="100%">
+      <TextField
+        {...props}
+        {...field}
+        onBlur={props.onBlur}
+        variant={"outlined"}
+        fullWidth
+        onChange={(e) => {
+          props.onChange && props.onChange(e);
+          field.onChange(e);
+        }}
+        error={Boolean(meta.touched && meta.error)}
+        helperText={meta.touched && meta.error ? meta.error : ""}
+      />
+    </Box>
+  );
+}
+export default FTextField;
